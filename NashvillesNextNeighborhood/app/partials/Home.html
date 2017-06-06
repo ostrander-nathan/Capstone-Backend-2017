@@ -1,0 +1,122 @@
+﻿<input type="button" value="logout" class="btn-default" ng-click="logout()" />
+<input type="button" value="return data" class="btn-default" ng-click="home()" />
+<div ng-repeat="thing in data"></div>
+<div class="container" ng-repeat="thing in data">
+   <!--<div class=“row”>
+        <div class=“col-xs-6 col-xs-offset-3">
+            <div class=“input-group”>
+                <span class=“input-group-btn”>
+                    <button class=“btn btn-default”><i class=“fa fa-search”></i></button>
+                </span>
+                <input type=“text” class=“form-control” placeholder=“Search for ...” ng-model=“searchText”>
+            </div>
+        </div>
+    </div>-->
+    <!--<h3>Todo</h3>
+    <div ng-repeat=“item in items | filter: {isCompleted:false} | filter: searchText”>
+        <div class=“panel panel-default”>
+            <div class=“panel-body”>
+                <div class=“col-xs-1"><input type=“checkbox” name=“” ng-model=“item.isCompleted” ng-change=“inputChange(item)“></div>
+                <div class=“col-xs-9”><a href=“#/items/view/{{item.id}}“>{{item.task}}</a></div>
+                <div class=“col-xs-1”>{{item.assignedTo}}</div>
+                <div class=“col-xs-1"><button class=“btn btn-danger fa fa-trash-o” ng-click=“deleteItem(item.id)“></button></div>
+            </div>
+        </div>
+    </div>-->
+
+    <h2>Search Results</h2>
+    <p>Description TBD</p>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ZipCode</th>
+            <th>Address</th>
+            <th>District</th>
+            <th>Descripition of Build</th>
+            <th>Permit Type</th>
+            <th>Purpose</th>
+            <th>Cost</th>
+            <!--<th>User Review</th>-->
+            <th>Save Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{thing.mapped_location_address}}</td>
+            <td>{{thing.mapped_location_zip}}</td>
+            <td>{{thing.council_dist}}</td>
+            <td>{{thing.permit_subtype_description}}</td>
+            <td>{{thing.permit_type_description}}</td>
+            <td>{{thing.purpose}}</td>
+            <td>${{thing.const_cost}}</td>
+
+            <td><input type="button" value="save" class="btn-default" ng-click="save(data[thing.id])"/></td>
+        </tr>
+        </tbody>
+    </table>
+    <!--<div class="form-check form-check-inline">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> 1
+        </label>
+    </div>
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"> 2
+        </label>
+    </div>
+    <div class="form-check form-check-inline disabled">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled> 3
+        </label>
+    </div>-->
+
+    <!--<div>
+        <p>Enter your Postal Code</p>
+        <div class="container">
+
+            <h3 class="clearfix">
+            </h3>
+
+            <div class="alert alert-danger text-center" role="alert" ng-show="apiError">
+                <b>API Error : </b>
+                <span>{{ apiStatus }}</span>
+            </div>
+
+            <form name="searchForm" novalidate
+                  ng-submit="search()">
+                <div class="input-group">
+                    <input name="place" type="text" class="form-control"
+                           ng-model="searchPlace" required autofocus/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary"
+                                ng-disabled="searchForm.$invalid">
+                            Search
+                        </button>
+                    </span>
+                </div>
+            </form>
+
+
+            <form name="resForm" class="form-horizontal" novalidate
+                  ng-submit="send()">
+                <div class="form-group">
+                    <label for="resName" class="col-xs-2 control-label">Name</label>
+                    <div class="col-xs-10">
+                        <input name="resName" type="text" class="form-control"
+                               ng-model="place.name" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="resLat" class="col-xs-2 control-label">Latitude</label>
+                    <div class="col-xs-10">
+                        <input name="resLat" type="number" class="form-control"
+                               ng-model="place.lat" required/>
+                    </div>
+                </div>
+
+
+            </form>
+
+        </div>
+    </div>-->
+</div>
