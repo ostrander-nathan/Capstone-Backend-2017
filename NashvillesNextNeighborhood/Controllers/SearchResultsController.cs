@@ -20,10 +20,12 @@ namespace NashvillesNextNeighborhood.Controllers
         // POST api/Save/Result
         [System.Web.Http.Route("api/Save/Result")]
         [System.Web.Http.HttpPost]
-        public void SaveResultsToDb(SearchResults searchResults)
+        public HttpResponseMessage SaveResultsToDb(SearchResults searchResults)
         {
             _context.SearchResult.Add(searchResults);
             _context.SaveChanges();
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
       
     }

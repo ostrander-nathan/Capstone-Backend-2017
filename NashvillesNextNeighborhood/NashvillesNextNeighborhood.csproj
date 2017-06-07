@@ -268,10 +268,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\app.js" />
-    <Content Include="app\AuthorizationController.js" />
+    <Content Include="app\AppConstants.js" />
+    <Content Include="app\css\styling.css" />
+    <Content Include="app\GoogleController.js" />
+    <Content Include="app\GoogleFactory.js" />
     <Content Include="app\HomeController.js" />
-    <Content Include="app\partials\Authorization.html" />
+    <Content Include="app\LoginController.js" />
+    <Content Include="app\NavController.js" />
+    <Content Include="app\partials\Google.html" />
     <Content Include="app\partials\Home.html" />
+    <Content Include="app\partials\Login.html" />
     <Content Include="app\partials\SignUp.html" />
     <Content Include="app\SignUpController.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
