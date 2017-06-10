@@ -1,120 +1,130 @@
 ﻿"use strict";
-app.controller("GoogleController", function ($scope, $rootScope, GoogleFactory, $location) {
-    var service;
-    var infowindow;
-    var markers = [];
-    var map;
-    console.log("anything in GoogleController");
+app.controller("GoogleController",
+    function($scope, $rootScope, GoogleFactory, $location, UserService) {
+        //var infowindow;
+        var markers = [];
+        var map;
+        var marker;
+        console.log("anything in GoogleController");
 
-    // INITIALIZING MAP
-    function initialize() {
-        var pyrmont = new google.maps.LatLng(36.174465, -86.767960);
-        $scope.map = new google.maps.Map(document.getElementById('map'), {
-            center: pyrmont,
-            zoom: 15,
-            scrollwheel: false,
-            mapTypeId: 'roadmap'
-        });
-        //Gets value from input
-            var input = document.getElementById('pac-input');
-            var autocomplete = new google.maps.places.Autocomplete(input);
+        $scope.users = UserService.all();
 
-            // Bind the map's bounds (viewport) property to the autocomplete object,
-            // so that the autocomplete requests use the current map bounds for the
-            // bounds option in the request.
-            autocomplete.bindTo('bounds', $scope.map);
+        // INITIALIZING MAP
+        function initialize() {
+            //var pyrmont = new google.maps.LatLng(36.174465, -86.767960);
+            var myLatlng = { lat: 36.174465, lng: -86.767960 };
 
-            var infowindow = new google.maps.InfoWindow();
-            //var infowindowContent = document.getElementById('infowindow-content');
-            //infowindow.setContent(infowindowContent);
-            var marker = new google.maps.Marker({
+            //NOT WORKING ALSO NOT IMPORTANT
+            $scope.marker = new google.maps.Marker({
+                position: myLatlng,
                 map: $scope.map,
-                anchorPoint: new google.maps.Point(0, -29)
+                title: "Click to zoom"
             });
 
-
-        autocomplete.addListener('place_changed',
-            function() {
-                infowindow.close();
-                marker.setVisible(false);
-                var place = autocomplete.getPlace();
-
-                if (!place.geometry) {
-                    // User entered the name of a Place that was not suggested and
-                    // pressed the Enter key, or the Place Details request failed.
-                    window.alert("No details available for input: '" + place.name + "'");
-                    return;
-                }
-                if (status == google.maps.GeocoderStatus.OK && place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                }
- 
-               
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
-
-                var address = '';
-                if (place.address_components) {
-                    address = [
-                      (place.address_components[0] && place.address_components[0].short_name || ''),
-                      (place.address_components[1] && place.address_components[1].short_name || ''),
-                      (place.address_components[2] && place.address_components[2].short_name || '')
-                    ].join(' ');
-                }
+            $scope.map = new google.maps.Map(document.getElementById("map"),
+            {
+                center: myLatlng,
+                zoom: 8,
+                scrollwheel: false,
+                mapTypeId: "roadmap"
             });
+
+            // Handles when the search button is clicked and what data is being passed
             $scope.search = function () {
+                console.log("query from input of $scope.query:", $scope.query);
                 GoogleFactory.getLocationItems($scope.map, $scope.query)
-                    .then(function (result) {
+                    .then(function(result) {
+                        console.log("result in GoogleController return from GoogleFactory",result );
                         $scope.map.setCenter(result[0].geometry.location);
-                            marker = new google.maps.Marker({
+
+                        marker = new google.maps.Marker({
                             position: result[0].geometry.location,
                             map: $scope.map,
                             draggable: true,
-                            icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                            title: "Click to zoom",
+                            icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
                         });
-                        console.log("marker", marker);
-                        console.log("result of search button click", result);
 
-                        var input = document.getElementById('pac-input');
-                        console.log("input from search box pac-input", result);
+                        // Infowidow sets data that is being passed into the marker  
+                        var infowindow = new google.maps.InfoWindow({
+                            content: result[0].formatted_address
+                        });
+
+                        marker.addListener('click', function () {
+                            console.log("marker hit");
+                            infowindow.open($scope.map, marker);
+                            $scope.map.setZoom(18);
+                            $scope.map.setCenter(marker.getPosition());
+                        });
+                        console.log("marker in search Functions", marker);
+                        console.log("result of input search button click", result);
                         var markers = result;
                         console.log("markers", markers);
                     });
             };
+
+            //Handles AutoComplete of pac-input only for actual autocomplete
+            var input = document.getElementById("pac-input");
+            //ATTEMPT TO FIX ISSUE WHERE DATA RETURNED WITH United States is messing up the return
+            var options = {
+                types: ["(cities)"],
+                componentRestrictions: {country: "us"}//United States only
+            };
+            //var autocomplete = new google.maps.places.Autocomplete(input, options);
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo("bounds", $scope.map);// Binds autocomplete obj to map
+
             //marker.setMap(null); will need to set markers to null
+            //infowindow.close(); will possibly need
+            //This will be needed to load Json from NashvilleData maybe but maybe not
+            //loadGeoJson(url:string, options?:Data.GeoJsonOptions, callback?:function(Array<Data.Feature>))
+
+            //Add Marker to map when called 
+            //function addMarkerFromNashData(location) {
+            //    console.log("Getting hit in GoogleController from HomeController", location);
+            //    var icon = {
+            //        url: "/app/constructionIcon.png",
+            //        scaledSize: new google.maps.Size(30, 30),
+            //        origin: new google.maps.Point(0, 0),
+            //        anchor: new google.maps.Point(0, 0)
+            //    }
+            //    var marker = new google.maps.Marker({
+            //        position: location,
+            //        map: $scope.map,
+            //        icon: icon
+            //    });
+
+            //};
+            //$scope.$apply();
 
 
 
+            //function addMarker(location) {
+            //    var icon = {
+            //        //url: "/images/droneIcon.png",
+            //        scaledSize: new google.maps.Size(30, 30),
+            //        origin: new google.maps.Point(0, 0),
+            //        anchor: new google.maps.Point(0, 0)
+            //    };
 
-        // This event listener will call addMarker() when the map is clicked.
-        //$scope.map.addListener('click', function (event) {
-        //    addMarker(event.latLng);
-        //});
+            //    var markerAdd = new google.maps.Marker({
+            //        position: location,
+            //        map: $scope.map,
+            //        animation: google.maps.Animation.DROP,
+            //        icon: icon
+            //    });
+            //    markerAdd.addListener('click', toggleBounce);
 
-        // Adds a marker to the map and push to the array.
-        //function addMarker(location) {
-        //    var icon = {
-        //        //url: "/images/droneIcon.png",
-        //        scaledSize: new google.maps.Size(30, 30),
-        //        origin: new google.maps.Point(0, 0),
-        //        anchor: new google.maps.Point(0, 0)
-        //    };
+            //    function toggleBounce() {
+            //        if (markerAdd.getAnimation() !== null) {
+            //            markerAdd.setAnimation(null);
+            //        } else {
+            //            markerAdd.setAnimation(google.maps.Animation.BOUNCE);
+            //        }
+            //    }
 
-        //    var markerAdd = new google.maps.Marker({
-        //        position: location,
-        //        map: $scope.map,
-        //        animation: google.maps.Animation.DROP,
-        //        icon: icon
-        //    });
-        //    markerAdd.addListener('click', toggleBounce);
 
-        //    function toggleBounce() {
-        //        if (markerAdd.getAnimation() !== null) {
-        //            markerAdd.setAnimation(null);
-        //        } else {
-        //            markerAdd.setAnimation(google.maps.Animation.BOUNCE);
-        //        }
-        //    }
+            // THIS PASSES IN THE LOCATIONS TO THE INFO WINDOW
             //var contentString = `<div><a href='#/users/review/lat/${location.lat()}/lng/${location.lng()}'>Add Review</a></div>`;
             //var infoWindow = new google.maps.InfoWindow({
             //    map: $scope.map,
@@ -130,11 +140,10 @@ app.controller("GoogleController", function ($scope, $rootScope, GoogleFactory, 
             //    lng: markerAdd.getPosition().lng()
             //});
             //$scope.$apply();
-        //}
+            //}
 
-        // Create the search box and link it to the UI element.
-        
-    }
-    initialize();
-});
+        }
+
+        initialize();
+    });
 //AIzaSyCGjx47WRbhcn8APdrr96y1qCJto1M98C4

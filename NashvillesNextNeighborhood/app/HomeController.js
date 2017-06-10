@@ -1,12 +1,14 @@
 ﻿"use strict";
-app.controller("HomeController", ["$scope", "$http", "$location",
-    function($scope, $http, $location) {
+app.controller("HomeController", 
+    //["$scope", "$http", "$location"]
+    function ($scope, $rootScope, $http, $location, UserService) {
         var page = 0;
         $scope.data = [];
         $scope.zipcode = "";
 
-        console.log("anything in HomeController");
+        $scope.firstUser = UserService.first();
 
+        //console.log("anything in HomeController");
 
         $scope.home = function() {
             console.log("Home Function");
@@ -18,7 +20,6 @@ app.controller("HomeController", ["$scope", "$http", "$location",
                     "$offset": page,
                     "$$app_token": "txvTrGDA6QIe9HrEnzsO9ZEtt"
                    // "$$app_token": "NASHVILLEDATA"
-
                 }
             }).done(function(data) {
                 var list = [];
@@ -43,7 +44,6 @@ app.controller("HomeController", ["$scope", "$http", "$location",
             console.log("Logout function");
             sessionStorage.removeItem("token");
             $http.defaults.headers.common["Authorization"] = "";
-
             $location.path("/");
         };
 
@@ -66,7 +66,16 @@ app.controller("HomeController", ["$scope", "$http", "$location",
                     console.log("Save Function result",result);
                 });
         };
+
+        $scope.loadOnMap = function (obj) {
+            console.log("LoadOnMap Function", obj);
+            var location = {
+                lat: obj.mapped_location.coordinates[0],
+                lng: obj.mapped_location.coordinates[1]
+            }
+            console.log("location in HomeController", location);
+            $scope.passLocationToService = UserService.locationPass(location);
+            //GoogleContoller.addMarkerFromNashData(location);
+        } 
     }
-]);
-
-
+);

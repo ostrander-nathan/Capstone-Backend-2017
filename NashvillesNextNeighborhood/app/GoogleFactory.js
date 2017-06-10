@@ -17,15 +17,17 @@ app.factory("GoogleFactory", function ($q, $http) {
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
                     for (var i = 0; i < results.length; i++) {
                         var place = results[i];
+                        console.log("place in google factory:", place);
                     }
                     resolve(results);
                 }
                 reject();
             }
-
         });
     };
     return {
         getLocationItems: getLocationItems
     };
+
+   
 });
