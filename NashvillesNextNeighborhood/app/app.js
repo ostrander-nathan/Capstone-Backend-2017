@@ -1,45 +1,22 @@
 ﻿var app = angular.module("Authentication", ["ngRoute"]);
 
-app.factory("UserService",
-    function() {
-        var users = ["sam", "mike", "bill"];
-        return {
-            all: function() {
-                return users;
-            },
-            first: function() {
-                return users[0];
-            },
-            locationPass: function (location) {
-                console.log("location in app.js to pass to googleController", location);
-                return location;
+app.service("UserService",
+    function () {
+       this.nashDataLocation = null;
+        //var users = ["sam", "mike", "bill"];
+        //return {
+        //    all: function() {
+        //        return users;
+        //    },
+        //    first: function() {
+        //        return users[0];
+        //    },
+        this.locationPass = function (location) {
+                console.log("location in app.js from pass in homecontroller", location);
+                this.nashDataLocation = location;
         }
-    }
+    
 });
-
-    //function() {
-    //    console.log("Getting hit in GoogleFactory from HomeController", location);
-    //    var icon = {
-    //        url: "/app/constructionIcon.png",
-    //        scaledSize: new google.maps.Size(30, 30),
-    //        origin: new google.maps.Point(0, 0),
-    //        anchor: new google.maps.Point(0, 0)
-
-    //    }
-    //    var marker = new google.maps.Marker({
-    //        position: location,
-    //        map: $scope.map,
-    //        icon: icon
-    //    });
-    //    return {
-    //        addMarkerFromNashData
-    //    }
-    //    $scope.$apply();;
-   // });
-  
-        
-       
-
 
 
 app.config([

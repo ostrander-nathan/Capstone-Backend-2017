@@ -6,6 +6,8 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUISqPz3n4h03i8_kh3YfvolNYrynv7yA&libraries=places,visualization" async defer></script>
+
 </head>
 <body ng-app="Authentication">
     <div ng-controller="NavController">
@@ -30,6 +32,6 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/angular")
     @RenderSection("scripts", required: false)
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUISqPz3n4h03i8_kh3YfvolNYrynv7yA&libraries=places,visualization"async defer></script>
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUISqPz3n4h03i8_kh3YfvolNYrynv7yA&libraries=places,visualization"async defer></script>*@
 </body>
 </html>
