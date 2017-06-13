@@ -27,6 +27,25 @@ namespace NashvillesNextNeighborhood.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-      
+
+        //GET api/Get/Result
+        [System.Web.Http.Route("api/Get/Result")]
+        [System.Web.Http.HttpGet]
+        public IEnumerable<SearchResults> GetResultsFromDb()
+        {
+            return _context.SearchResult;
+        }
+
+        //DELETE api/Delete/Result
+        [System.Web.Http.Route("api/Delete/Result/{id}")]
+        [System.Web.Http.HttpDelete]
+        public HttpResponseMessage GetResultsFromDb(int id)
+        {
+            var current = _context.SearchResult.Find(id);
+            _context.SearchResult.Remove(current);
+            _context.SaveChanges();
+            return Request.CreateResponse(HttpStatusCode.OK);
+
+        }
     }
 }

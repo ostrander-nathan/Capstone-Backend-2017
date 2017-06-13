@@ -21,7 +21,7 @@ app.service("UserService",
 
 app.config([
     "$routeProvider", function($routeProvider) {
-        console.log("appjs connected ");
+        //console.log("appjs connected ");
         $routeProvider.when("/",
             {
                 templateUrl: "app/partials/Login.html",
@@ -37,10 +37,10 @@ app.config([
                 templateUrl: "app/partials/Home.html",
                 controller: "HomeController"
             })
-            .when("/map",
+            .when("/saved",
             {
-                templateUrl: "app/partials/Home.html",
-                controller: "GoogleController"
+                templateUrl: "app/partials/SavedLocations.html",
+                controller: "SavedLocationsController"
             });
     }
 ]);

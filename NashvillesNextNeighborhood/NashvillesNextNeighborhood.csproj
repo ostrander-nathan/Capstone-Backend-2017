@@ -237,6 +237,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchResultsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DAL\UserLocationsRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -270,12 +271,12 @@
     <Content Include="app\app.js" />
     <Content Include="app\AppConstants.js" />
     <Content Include="app\css\styling.css" />
-    <Content Include="app\GoogleController.js" />
+    <Content Include="app\SavedLocationsController.js" />
     <Content Include="app\GoogleFactory.js" />
     <Content Include="app\HomeController.js" />
     <Content Include="app\LoginController.js" />
     <Content Include="app\NavController.js" />
-    <Content Include="app\partials\Google.html" />
+    <Content Include="app\partials\SavedLocations.html" />
     <Content Include="app\partials\Home.html" />
     <Content Include="app\partials\Login.html" />
     <Content Include="app\partials\SignUp.html" />

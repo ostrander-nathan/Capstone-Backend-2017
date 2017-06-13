@@ -1,7 +1,8 @@
 ﻿"use strict";
 app.controller("HomeController",
     //["$scope", "$http", "$location"]
-    function($scope, $rootScope, $http, $location, UserService, GoogleFactory) {
+    function ($scope, $rootScope, $http, $location, UserService, GoogleFactory) {
+        $rootScope.locationResult = {};
         function initialize() {
             //console.log("anything in HomeController");
             var page = 0;
@@ -10,7 +11,10 @@ app.controller("HomeController",
             var markers = [];
             var map;
             var myLatlng = { lat: 36.174465, lng: -86.767960 };
-
+           
+            var input = document.getElementById("searchInput");
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addDomListener(window, 'load', initialize);
             //$scope.firstUser = UserService.first();
             $scope.map = new google.maps.Map(document.getElementById("map"),
             {
@@ -28,14 +32,13 @@ app.controller("HomeController",
                 title: "Click to zoom"
             });
 
-
             $scope.getNashData = function() {
                 //console.log("Get Nash Data Function");
                 $.ajax({
                     url: "https://data.nashville.gov/resource/p5r5-bnga.json",
                     type: "GET",
                     data: {
-                        "$limit": 20,
+                        "$limit": 100,
                         "$offset": page,
                         "$$app_token": "txvTrGDA6QIe9HrEnzsO9ZEtt"
                         // "$$app_token": "NASHVILLEDATA"
@@ -54,7 +57,11 @@ app.controller("HomeController",
 
                     for(var x in data) {
                         var permitIssued = data[x];
-                        for (var y in permitIssued.mapped_location.coordinates) {
+                        var coordinates = permitIssued.mapped_location;
+
+                        if (!coordinates) continue;
+                        for (var y in permitIssued.mapped_location.coordinates) 
+                        {
                             var permitLocations = permitIssued[y];
                         }
                         var location = new google.maps.LatLng(permitIssued.mapped_location.coordinates[1], permitIssued.mapped_location.coordinates[0]);
@@ -71,7 +78,7 @@ app.controller("HomeController",
             $scope.loadMore = function(data) {
                 console.log("LoadMore function");
                 page += 20;
-                $scope.home();
+                $scope.getNashData();
             };
 
             $scope.logout = function() {
@@ -81,7 +88,7 @@ app.controller("HomeController",
                 $location.path("/");
             };
 
-            $scope.save = function(obj) {
+            $scope.save = function (obj) {
                 console.log("Save Function", obj);
                 $http({
                         url: "api/Save/Result",
@@ -100,14 +107,6 @@ app.controller("HomeController",
                         console.log("Save Function result", result);
                     });
             };
-
-            $scope.loadOnMap = function(obj) {
-                console.log("LoadOnMap Function", obj);
-                var location = {
-                    lat: obj.mapped_location.coordinates[0],
-                    lng: obj.mapped_location.coordinates[1]
-                };
-                console.log("location in HomeController", location);
 
 
                 // Handles when the search button is clicked and what data is being passed
@@ -128,7 +127,6 @@ app.controller("HomeController",
                                 icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
                             });
 
-                            // Infowidow sets data that is being passed into the marker  
                             var infowindow = new google.maps.InfoWindow({
                                 content: result[0].formatted_address
                             });
@@ -146,27 +144,20 @@ app.controller("HomeController",
                             console.log("markers", markers);
                         });
                 };
-                // AUTOCOMPLETE
-                var options = {
-                    componentRestrictions: { country: "us" }
-                };
-                var inputFrom = document.getElementById("searchInput");
-                console.log("searchInput", inputFrom);
-                var autocompleteFrom = new google.maps.places.Autocomplete(inputFrom, options);
-                google.maps.event.addListener(autocompleteFrom,
-                    "place_changed",
-                    function() {
-                        var place = autocompleteFrom.getPlace();
-                        autocompleteFrom.bindTo("bounds", $scope.map);
-                        $scope.query = place.formatted_address;
-                        $scope.$apply();
-                    });
-               
-            };
-           
         }
         initialize();
     });
+//$scope.loadOnMap = function(obj) {
+    //                console.log("LoadOnMap Function", obj);
+    //                var location = {
+    //                    lat: obj.mapped_location.coordinates[0],
+    //                    lng: obj.mapped_location.coordinates[1]
+    //                };
+    //                console.log("location in HomeController", location);
+    //            };
+
+
+
 //$scope.map.setCenter(location);
 
 //var request = {

@@ -13,5 +13,8 @@ app.controller("NavController", function ($scope, $location) {
     $scope.logout = () => {
         $location.url("/");
     };
+    $scope.goToSavedLocations = () => {
+        $location.url("/saved");
+    };
 
 });
