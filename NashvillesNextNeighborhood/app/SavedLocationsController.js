@@ -14,7 +14,7 @@ app.controller("SavedLocationsController",
                 function errorCallback(response) {
                     console.log("error", response);
                 });
-        }
+        };
         $scope.getSavedData();
 
         $scope.delete = function(id) {

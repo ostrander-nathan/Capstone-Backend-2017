@@ -42,8 +42,8 @@ namespace NashvillesNextNeighborhood.Controllers
         public HttpResponseMessage GetResultsFromDb(int id)
         {
             var current = _context.SearchResult.Find(id);
-            _context.SearchResult.Remove(current);
-            _context.SaveChanges();
+                _context.SearchResult.Remove(current);
+                _context.SaveChanges();
             return Request.CreateResponse(HttpStatusCode.OK);
 
         }

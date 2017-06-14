@@ -1,70 +1,74 @@
 ﻿<!--<div ng-controller="HomeController">-->
-    <!--<ul ng-repeat="user in users">
-        <li>{{user}}</li>
-    </ul>-->
-    <div class="mapHolder">
-        <div>
+<!--<ul ng-repeat="user in users">
+    <li>{{user}}</li>
+</ul>-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-7" id="mapHolder">
+            <div id="floating-panel">
+                <input ng-click="clearMarkers();" type=button value="Hide Markers">
+                <input ng-click="showMarkers();" type=button value="Show All Markers">
+                <input ng-click="deleteMarkers();" type=button value="Delete Markers">
+            </div>
+            <div id="map" style="height: 500px; width: 600px;"></div>
+        </div>
+        <div class="col-md-5">
             <h1>Search your Neighborhood</h1>
             <div>
-                <input id="searchInput" class="controls" ng-model="query" type="text" placeholder="SearchBox" />
-                <button class="btn btn-default" type="button" ng-click="search(query)" ng-disabled="query.length == 0" title="search"><!--ng-change="getNashData(query)-->
+                <input id="zipInput" class="controls" ng-model="zipQuery" type="text" placeholder="Type your zipcode" /><br />
+                <button class="btn btn-default" type="button" ng-click="zipSearch(zipQuery)" ng-disabled="query.length == 0" title="zip">
                     <i class="icon-search"></i>Search Location
                 </button>
-            </div>
-        </div>
-        <div id="map" style="height: 600px; width: 700px;"></div>
-    </div>
-    <!--<ul class="nested">
-        <li>First User:{{firstUser}}</li>
-    </ul>-->
 
-    <input type="button" value="return data" class="btn btn-default" ng-click="getNashData()" />
-    <input type="button" value="load more" class="btn btn-default" ng-click="loadMore()" />
-    <!-- <input type="text" ng-model='zipcode' ng-pattern='/^(\d{5}(-\d{4})?|[A-Z]\d[A-Z] *\d[A-Z]\d)$/' placeholder="Search By ZipCode" ng-model="searchText" ng-click() ng-disabled="query.length == 0"/>-->
-    <!-- Zip Code : {{ zipcode }}-->
-    <div class="container" ng-repeat="thing in data">
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
 
-                    <h2>{{thing.mapped_location_address}}, {{thing.mapped_location_zip}} District:{{thing.council_dist}}</h2>
-                    <p>Permit:{{thing.permit_type_description}} / {{thing.permit_subtype_description}}</p>
-
-                </div>
-                <table class="table table-fixed">
-                    <thead>
-                        <tr>
-                            <th class="col-xs-8">Purpose</th>
-                            <th class="col-xs-2">Cost</th>
-                            <th class="col-xs-2">Save Location</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col-xs-8">{{thing.purpose}}</td>
-                            <td class="col-xs-2">${{thing.const_cost}}</td>
-                            <td class="col-xs-2">
-                                <input type="button" value="save" class="btn btn-default" ng-click="save(data[thing.id])" />
-<!--                                <input type="button" value="Show on map" class="btn btn-default" ng-click="loadOnMap(data[thing.id])" />-->
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    <input id="searchInput" class="controls" ng-model="query" type="text" placeholder="SearchBox" /><br />
+                    <button class="btn btn-default" type="button" ng-click="search(query)" ng-disabled="query.length == 0" title="search">
+                        <i class="icon-search"></i>Search Location
+                    </button>
+                    <input type="button" value="load more" class="btn btn-default" ng-click="loadMore()" />
+                    <div class="checkbox abc-checkbox">
+                        <input type="checkbox" id="checkbox1">
+                        <label for="checkbox1">
+                            Check me out
+                        </label>
+                    </div>
+</div>
     </div>
 </div>
-<!--</div>-->
-<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
-    <div class="list-group">
-        <a href="#" class="list-group-item active">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
-        <a href="#" class="list-group-item">Link</a>
     </div>
-</div><!--/.sidebar-offcanvas-->
+            <!--    <input type="button" value="return data" class="btn btn-default" ng-click="getNashData()" />-->
+            <!--    <input type="button" value="load more" class="btn btn-default" ng-click="loadMore()" />-->
+            <div class="container" ng-repeat="thing in data">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                            <h2>{{thing.mapped_location_address}}, {{thing.mapped_location_zip}} District:{{thing.council_dist}}</h2>
+                            <p>Permit:{{thing.permit_type_description}} / {{thing.permit_subtype_description}}</p>
+
+                        </div>
+                        <table class="table table-fixed">
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-8">Purpose</th>
+                                    <th class="col-xs-2">Cost</th>
+                                    <th class="col-xs-2">Save Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-xs-8">{{thing.purpose}}</td>
+                                    <td class="col-xs-2">${{thing.const_cost}}</td>
+                                    <td class="col-xs-2">
+                                        <input type="button" value="save" class="btn btn-default" ng-click="save(data[thing.id])" />
+                                        <!--                                <input type="button" value="Show on map" class="btn btn-default" ng-click="loadOnMap(data[thing.id])" />-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--</div>-->
+            
+    </div>

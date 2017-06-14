@@ -20,23 +20,12 @@ app.controller("NavController", function ($scope, $location) {
 
 
     $(document).ready(function () {
-
-        /**
-         * This object controls the nav bar. Implement the add and remove
-         * action over the elements of the nav bar that we want to change.
-         *
-         * @type {{flagAdd: boolean, elements: string[], add: Function, remove: Function}}
-         */
         var myNavBar = {
-
             flagAdd: true,
-
             elements: [],
-
             init: function (elements) {
                 this.elements = elements;
             },
-
             add: function () {
                 if (this.flagAdd) {
                     for (var i = 0; i < this.elements.length; i++) {
@@ -45,7 +34,6 @@ app.controller("NavController", function ($scope, $location) {
                     this.flagAdd = false;
                 }
             },
-
             remove: function () {
                 for (var i = 0; i < this.elements.length; i++) {
                     document.getElementById(this.elements[i]).className =
@@ -71,26 +59,22 @@ app.controller("NavController", function ($scope, $location) {
          * of the scroll
          */
         function offSetManager() {
-
             var yOffset = 0;
             var currYOffSet = window.pageYOffset;
-
             if (yOffset < currYOffSet) {
                 myNavBar.add();
             }
-            else if (currYOffSet == yOffset) {
+            else if (currYOffSet === yOffset) {
                 myNavBar.remove();
             }
 
         }
-
         /**
          * bind to the document scroll detection
          */
         window.onscroll = function (e) {
             offSetManager();
         }
-
         /**
          * We have to do a first detectation of offset because the page
          * could be load with scroll down set.
