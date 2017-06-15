@@ -1,20 +1,20 @@
-﻿<div class="container" >
+﻿<div class="container">
     <div class="row">
         <div class="col-md-7" id="mapHolder">
             <div id="map" style="height: 500px; width: 600px;"></div>
         </div>
         <form name="myForm">
-            <span class="col-md-5">
+            <div class="col-md-5">
                 <h2>Find out what is happening in your area</h2>
                 <div id="custom-search-input">
                     <div class="input-group col-md-12">
-                        <input id="zipInput" type="text" class="form-control input-lg" placeholder="Type in your address" ng-model="address" required/>
+                        <input id="zipInput" type="text" class="form-control input-lg" placeholder="Type in your address" ng-model="address" required />
                         <span class="input-group-btn">
                             <button class="btn btn-info btn-lg" type="button"></button>
                         </span>
                     </div>
                 </div>
-            </span>
+            </div>
         </form>
 
         <div class="col-md-5">
@@ -23,54 +23,56 @@
                 <span id="postal_code" ng-model="zip" type="text"></span>
             </label>
         </div>
-        <input type="button" value="New Search" class="btn btn-default" ng-click="newSearch()" ng-disabled="myForm.$invalid"/>
     </div>
 </div>
-<!--<div class="container" ng-repeat="thing in data| filter:q | startFrom:currentPage*pageSize | limitTo:pageSize">-->
-    <div class="container" ng-repeat="thing in data">
 
-<!--        <input ng-model="q" id="search" class="form-control" placeholder="Filter text">-->
-<!--        <select ng-model="pageSize" id="pageSize" class="form-control">-->
-<!--            <option value="5">5</option>-->
-<!--            <option value="10">10</option>-->
-<!--            <option value="15">15</option>-->
-<!--            <option value="20">20</option>-->
-<!--        </select>-->
-<!---->
-<!--        <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">-->
-<!--            Previous-->
-<!--        </button>-->
-<!--        {{currentPage+1}}/{{numberOfPages()}}-->
-<!--        <button ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">-->
-<!--            Next-->
-<!--        </button>-->
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+<div class="newSearch">
+    <input type="button" value="New Search" class="btn btn-default" ng-click="newSearch()" ng-disabled="myForm.$invalid" />
+</div>
 
-                    <h2>{{thing.mapped_location_address}}, {{thing.mapped_location_zip}} District:{{thing.council_dist}}</h2>
-                    <p>Permit:{{thing.permit_type_description}} / {{thing.permit_subtype_description}}</p>
+<input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+<select ng-model="pageSize" id="pageSize" class="form-control">
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="15">15</option>
+    <option value="20">20</option>
+</select>
+<ul>
+    <li ng-repeat="thing in data | filter:q | startFrom:currentPage*pageSize | limitTo:pageSize">
+        {{thing.mapped_location_address}}
+    </li>
+</ul>
+<table class="table">
+        <thead>
+            <tr>
+                <th class="col-xs-2">Address</th>
+                <th class="col-xs-2">Description of Permit</th>
+                <th class="col-xs-4">Purpose</th>
+                <th class="col-xs-2">Cost</th>
+                <th class="col-xs-2">Save Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="thing in data.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                <td>{{thing.mapped_location_address}}, {{thing.mapped_location_zip}} District:{{thing.council_dist}}</td>
+                <td>Permit:{{thing.permit_type_description}} / {{thing.permit_subtype_description}}</td>
+                <td>{{thing.purpose}}</td>
+                <td>${{thing.const_cost}}</td>
+                <td class="col-xs-2">
+                    <input type="button" value="save" class="btn btn-default" ng-click="save(data[thing.id])" />
+                </td>
+            </tr>
+    </table>
+    <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+        Previous
+    </button>
+    {{currentPage+1}}/{{numberOfPages()}}
+    <button ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">
+        Next
+    </button>
 
-                </div>
-                <table class="table table-fixed">
-                    <thead>
-                        <tr>
-                            <th class="col-xs-8">Purpose</th>
-                            <th class="col-xs-2">Cost</th>
-                            <th class="col-xs-2">Save Location</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col-xs-8">{{thing.purpose}}</td>
-                            <td class="col-xs-2">${{thing.const_cost}}</td>
-                            <td class="col-xs-2">
-                                <input type="button" value="save" class="btn btn-default" ng-click="save(data[thing.id])" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
 
-            </div>
-        </div>
-    </div>
+
+
+
+   

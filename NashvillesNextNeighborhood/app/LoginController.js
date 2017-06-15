@@ -27,5 +27,8 @@
                     $location.path("/home");
                 });
         };
+
+
+
     }
 ]);

@@ -11,12 +11,12 @@ app.service("UserService",
         //    first: function() {
         //        return users[0];
         //    },
-        this.locationPass = function (location) {
-                console.log("location in app.js from pass in homecontroller", location);
-                this.nashDataLocation = location;
-        }
-    
-});
+        this.locationPass = function(location) {
+            console.log("location in app.js from pass in homecontroller", location);
+            this.nashDataLocation = location;
+        };
+
+    });
 
 
 app.config([
