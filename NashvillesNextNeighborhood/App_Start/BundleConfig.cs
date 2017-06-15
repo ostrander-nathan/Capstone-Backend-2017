@@ -28,11 +28,7 @@ namespace NashvillesNextNeighborhood
                       "~/Scripts/angular.js",
                       "~/Scripts/angular-route.js",
                       "~/app/app.js",
-                      
-
-
-
-                      "~/Scripts/respond.js")
+                     "~/Scripts/respond.js")
              .IncludeDirectory("~/app", "*.js", true));
         }
     }

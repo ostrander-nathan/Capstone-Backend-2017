@@ -1,29 +1,28 @@
-﻿    <div class="container" ng-repeat="thing in response">
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2>{{thing.Address}}, {{thing.ZipCode}} District:{{thing.District}}</h2>
-                    <p>Permit:{{thing.PermitType}} / {{thing.DescriptionOfBuild}}</p>
-                </div>
-                <table class="table table-fixed">
-                    <thead>
-                        <tr>
-                            <th class="col-xs-8">Purpose</th>
-                            <th class="col-xs-2">Cost</th>
-                            <th class="col-xs-2">Delete Location</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col-xs-8">{{thing.Purpose}}</td>
-                            <td class="col-xs-2">${{thing.Cost}}</td>
-                            <td class="col-xs-2">
-                                <input type="button" value="Delete" class="btn btn-default" ng-click="delete(thing.Id)" />
-                                
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+﻿<div class="container" id="savedWrapper" ng-repeat="thing in response">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>{{thing.Address}}, {{thing.ZipCode}} District:{{thing.District}}</h2>
+                <p>Permit:{{thing.PermitType}} / {{thing.DescriptionOfBuild}}</p>
             </div>
+            <table class="table table-fixed">
+                <thead>
+                <tr>
+                    <th class="col-xs-8">Purpose</th>
+                    <th class="col-xs-2">Cost</th>
+                    <th class="col-xs-2">Delete Location</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-xs-8">{{thing.Purpose}}</td>
+                    <td class="col-xs-2">${{thing.Cost}}</td>
+                    <td class="col-xs-2">
+                        <input type="button" value="Delete" class="btn btn-default" ng-click="delete(thing.Id)"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
