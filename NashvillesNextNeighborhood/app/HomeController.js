@@ -116,25 +116,18 @@ app.controller("HomeController",
                 $scope.pageSize = 10;
                 $scope.q = "";
 
-                $scope.data = data;
-                $scope.viewby = 10;
-                $scope.totalItems = $scope.data.length;
-                $scope.currentPage = 4;
-                $scope.itemsPerPage = $scope.viewby;
-                $scope.maxSize = 5; //Number of pager buttons to show
-
-                $scope.getData = function() {
-                    // needed for the pagination calc
-                    // https://docs.angularjs.org/api/ng/filter/filter
-                    return $filter("filter")($scope.data, $scope.q);
-                };
-                $scope.numberOfPages = function() {
-                    return Math.ceil($scope.getData().length / $scope.pageSize);
+                $scope.numberOfPages = function () {
+                    return Math.ceil($scope.data.length / $scope.pageSize);
                 };
                 for (var i = 0; i < 65; i++) {
                     $scope.data.push("Item " + i);
                 }
 
+                // FILTER FUNCITONS
+                $scope.getData = function() {
+                    return $filter("filter")($scope.data, $scope.q);
+                };
+        
                 app.filter("startFrom",
                     function() {
                         return function(input, start) {
@@ -143,19 +136,6 @@ app.controller("HomeController",
                         };
                     });
 
-
-                $scope.setPage = function(pageNo) {
-                    $scope.currentPage = pageNo;
-                };
-
-                $scope.pageChanged = function() {
-                    console.log("Page changed to: " + $scope.currentPage);
-                };
-
-                $scope.setItemsPerPage = function(num) {
-                    $scope.itemsPerPage = num;
-                    $scope.currentPage = 1; //reset to first paghe
-                };
                 //END PAGINATION
 
                 for (var x in data) {
@@ -285,11 +265,16 @@ app.controller("HomeController",
                         "DescriptionOfBuild": obj.permit_type_description
                     }
                 })
-                .then(function(result) {
+                .then(function (result) {
+                    $scope.deleteFromPage(obj);
 
                     console.log("Save Function result", result);
                 });
         };
+
+        $scope.deleteFromPage = function (obj) {
+            console.log("Delete From Page Function", obj);
+        }
     }
 ]);
 

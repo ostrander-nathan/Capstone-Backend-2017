@@ -1,15 +1,15 @@
 ﻿.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 #mapHolder {
-    padding: 25px;
+    padding-top: 25px;
 }
 #map {
     border-style: solid;
 }
 
 .newSearch {
-    width: inherit;
-    float: right;
-    margin-right: 200px;
+/*    width: inherit;*/
+/*    float: right;*/
+/*    margin-right: 200px;*/
 }
 /*
 * Style tweaks
