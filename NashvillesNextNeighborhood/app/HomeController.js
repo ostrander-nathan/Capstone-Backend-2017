@@ -1,8 +1,8 @@
 ﻿"use strict";
 app.controller("HomeController",
 [
-    "$scope", "$http", "$rootScope", "$filter",
-    function($scope, $http, $rootScope, $filter) {
+    "$scope", "$http", "$rootScope", 
+    function($scope, $http, $rootScope) {
         $rootScope.locationResult = {};
         var page = 0;
         $scope.markers = [];
@@ -13,8 +13,8 @@ app.controller("HomeController",
         $scope.q = "";
         $scope.input = "";
         var icon = {
-            url: "//maps.google.com/mapfiles/ms/icons/green-dot.png",
-            scaledSize: new google.maps.Size(30, 30),
+            url: "/app/images/titansIcon.png",
+            scaledSize: new google.maps.Size(70, 70),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(0, 0)
         };
@@ -29,7 +29,6 @@ app.controller("HomeController",
                 mapTypeId: "roadmap"
             });
         };
-        // $scope.marker is my initial marker that sets up with titans logo
         //Sets up Markers Obj in addMarker function
         $scope.addMarker = function(myLatlng) {
             $scope.marker = new google.maps.Marker
@@ -37,11 +36,14 @@ app.controller("HomeController",
                 position: myLatlng,
                 map: $scope.map,
                 zoom: $scope.map.setZoom(12),
-                icon: icon,
-                title: "Click to zoom"
+                icon: icon
             });
             $scope.markers.push($scope.marker);
         };
+
+        // Initializes Map
+        $scope.addMap(myLatlng);
+        $scope.addMarker(myLatlng);
 
 
         // Removes the markers from the map
@@ -49,15 +51,6 @@ app.controller("HomeController",
             $scope.markers = [];
         };
 
-        // Deletes all markers in the array 
-        $scope.deleteMarkers = function() {
-            $scope.clearMarkers();
-            $scope.addMap(myLatlng);
-            $scope.addMarker(myLatlng);
-            $scope.input = "";
-        };
-        $scope.addMap(myLatlng);
-        $scope.addMarker(myLatlng);
 
         // Handles converting inputs and autocomplete then calls $scope.zipSearch(zipConverstion) with data to place markers
         $scope.input = document.getElementById("zipInput");
@@ -78,10 +71,7 @@ app.controller("HomeController",
                             var zipConverstion = parseInt(place.address_components[i].long_name);
                             document.getElementById("postal_code").innerHTML = zipConverstion;
                             console.log("zipConversion", zipConverstion);
-
                             $scope.clearMarkers();
-
-
                             $scope.zipSearch(zipConverstion);
                         }
                     }
@@ -112,42 +102,24 @@ app.controller("HomeController",
                 console.log("initial data return", data);
 
                 //Pagination Controls
-                $scope.currentPage = 0;
+                $scope.currentPage = 1;
                 $scope.pageSize = 10;
-                $scope.q = "";
 
-                $scope.numberOfPages = function () {
+                $scope.numberOfPages = function() {
                     return Math.ceil($scope.data.length / $scope.pageSize);
                 };
                 for (var i = 0; i < 65; i++) {
                     $scope.data.push("Item " + i);
                 }
-
-                // FILTER FUNCITONS
-                $scope.getData = function() {
-                    return $filter("filter")($scope.data, $scope.q);
-                };
-        
-                app.filter("startFrom",
-                    function() {
-                        return function(input, start) {
-                            start = +start; //parse to int
-                            return input.slice(start);
-                        };
-                    });
-
                 //END PAGINATION
 
-                for (var x in data) {
+                for (var x in $scope.data) {
                     if (data.hasOwnProperty(x)) {
                         var permitIssued = data[x];
-                        //console.log("permitIssued", permitIssued);
                         var coordinates = permitIssued.mapped_location;
 
                         if (!coordinates) continue;
-                        //for (var y in permitIssued.mapped_location.coordinates) {
-                        //    var permitLocations = permitIssued[y];
-                        //}
+
                         var location = new google.maps.LatLng(permitIssued.mapped_location.coordinates[1],
                             permitIssued.mapped_location.coordinates[0]);
 
@@ -158,10 +130,11 @@ app.controller("HomeController",
                         });
                         //$scope.markers = [];
                         $scope.markers.push(marker);
+                        permitIssued.marker = marker;
                         console.log("markers", $scope.markers);
+
                         var myfunction = function(permit, marker) {
                             console.log("permit", permit);
-
                             return function() {
                                 var contentString = '<div id="iw-container">' +
                                     `<div class="iw-title">${permit.address} <br> District : ${permit
@@ -172,9 +145,9 @@ app.controller("HomeController",
                                     `<div class="iw-subTitle"> ${permit.permit_subtype_description}</div>` +
                                     `<br><p>Purpose : ${permit.purpose} <br></p>` +
                                     '<div class="iw-subTitle">Contacts</div>' +
-                                    `<p>${permit.date_issued}${permit.contact}<br>${permit.zip} ${permit
+                                    `<p>${permit.contact}<br>${permit.zip} ${permit
                                     .mapped_location_state}</p>` +
-                                    `<br><div><input type="button" value="save" class="btn btn-default" ng-click="$scope.save('${permit}')"</div>` +
+                                    `<br><div><input type="button" value="save" class="btn btn-default" ng-click=save('${permit}')"</div>` +
                                     '<div class="iw-bottom-gradient"></div>' +
                                     "</div>";
 
@@ -240,17 +213,35 @@ app.controller("HomeController",
                         marker.addListener("click", myfunction(permitIssued, marker));
                     }
                 }
+                $scope.$apply();
                 google.maps.event.addDomListener(window, "load");
             });
         };
 
         $scope.newSearch = function() {
-
-            console.log("New Search Function");
-            $scope.deleteMarkers();
+            $scope.address = "";
+            $scope.data = [];
+            $scope.markers = [];
+            $scope.addMap(myLatlng);
+            $scope.addMarker(myLatlng);
         };
 
-        $scope.save = function(obj) {
+        $scope.showOnMap = function(obj) {
+            new google.maps.event.trigger(obj.marker, "click");
+
+
+
+            google.maps.event.addListener($scope.map,
+                "click",
+                function() {
+                    infowindow.close();
+                });
+            console.log("showOnMap function", obj);
+
+        };
+
+        $scope.save = function (index) {
+            var obj = $scope.data[index];
             console.log("Save Function", obj);
             $http({
                     url: "api/Save/Result",
@@ -265,16 +256,16 @@ app.controller("HomeController",
                         "DescriptionOfBuild": obj.permit_type_description
                     }
                 })
-                .then(function (result) {
-                    $scope.deleteFromPage(obj);
-
+                .then(function(result) {
+                    $scope.deleteFromPage(index);
                     console.log("Save Function result", result);
                 });
         };
 
-        $scope.deleteFromPage = function (obj) {
-            console.log("Delete From Page Function", obj);
-        }
+        $scope.deleteFromPage = function (index) {
+            $scope.data.splice(index, 1);
+            console.log("Delete From Page Function", index);
+        };
     }
 ]);
 

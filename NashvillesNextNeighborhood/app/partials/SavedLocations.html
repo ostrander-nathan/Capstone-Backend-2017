@@ -4,6 +4,8 @@
             <div class="panel-heading">
                 <h2>{{thing.Address}}, {{thing.ZipCode}} District:{{thing.District}}</h2>
                 <p>Permit:{{thing.PermitType}} / {{thing.DescriptionOfBuild}}</p>
+                <input type="button" value="Show On Map" class="btn btn-default" ng-click="showOnMap(thing.Id)" />
+
             </div>
             <table class="table table-fixed">
                 <thead>
