@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -7,15 +7,14 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUISqPz3n4h03i8_kh3YfvolNYrynv7yA&libraries=places,visualization" async defer></script>
-@*    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.js"></script>*@
-@*    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>*@
+    <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC|Cormorant+SC|Exo|Special+Elite|Stint+Ultra+Expanded" rel="stylesheet">
 
 
 </head>
 <body ng-app="Authentication">
     <div ng-controller="NavController">
         <!-- Fixed navbar -->
-        <nav id="header" class="navbar navbar-fixed-top">
+        <nav id="header" class="navbar navbar-fixed-top" ng-show="navContainer">
             <div id="header-container" class="container navbar-container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -31,6 +30,7 @@
                         <li><a ng-click="goToHome()" style="cursor:pointer">Home</a></li>
                         <li><a ng-click="logout()" style="cursor:pointer">Logout</a></li>
                         <li><a ng-click="goToSavedLocations()" style="cursor:pointer">Saved Locations</a></li>
+@*                        <li>Hello {{user()}} you are logged in!</li>*@
                     </ul>
                 </div><!-- /.nav-collapse -->
             </div><!-- /.container -->
@@ -43,7 +43,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+@*            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>*@
         </footer>
     </div>
 

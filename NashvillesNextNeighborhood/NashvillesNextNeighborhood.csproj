@@ -257,6 +257,18 @@
     <Compile Include="Migrations\201706052350098_SearchResults21.Designer.cs">
       <DependentUpon>201706052350098_SearchResults21.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706171838549_SearchResultsWithUID.cs" />
+    <Compile Include="Migrations\201706171838549_SearchResultsWithUID.Designer.cs">
+      <DependentUpon>201706171838549_SearchResultsWithUID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706200206389_SearchResultsWithLatLng.cs" />
+    <Compile Include="Migrations\201706200206389_SearchResultsWithLatLng.Designer.cs">
+      <DependentUpon>201706200206389_SearchResultsWithLatLng.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706200230363_SearchResultsWithLatLng1.cs" />
+    <Compile Include="Migrations\201706200230363_SearchResultsWithLatLng1.Designer.cs">
+      <DependentUpon>201706200230363_SearchResultsWithLatLng1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -271,9 +283,8 @@
     <Content Include="app\app.js" />
     <Content Include="app\AppConstants.js" />
     <Content Include="app\css\styling.css" />
-    <Content Include="app\images\2.jpg" />
-    <Content Include="app\images\20170508-DJI_0055.jpg" />
-    <Content Include="app\images\DJI_0044-Pano-2.jpg" />
+    <Content Include="app\images\nashvilleBackground.jpg" />
+    <Content Include="app\images\Vintage-Map-of-Nashville-Tennessee-_art.jpg" />
     <Content Include="app\SavedLocationsController.js" />
     <Content Include="app\GoogleFactory.js" />
     <Content Include="app\HomeController.js" />
@@ -374,6 +385,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706052350098_SearchResults21.resx">
       <DependentUpon>201706052350098_SearchResults21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706171838549_SearchResultsWithUID.resx">
+      <DependentUpon>201706171838549_SearchResultsWithUID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706200206389_SearchResultsWithLatLng.resx">
+      <DependentUpon>201706200206389_SearchResultsWithLatLng.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706200230363_SearchResultsWithLatLng1.resx">
+      <DependentUpon>201706200230363_SearchResultsWithLatLng1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

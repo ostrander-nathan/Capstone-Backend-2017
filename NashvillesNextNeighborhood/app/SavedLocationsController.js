@@ -1,6 +1,6 @@
 ﻿"use strict";
 app.controller("SavedLocationsController",
-    function($scope, $rootScope, GoogleFactory, $location, UserService, $http) {
+    function ($scope, $rootScope, $location, mapService, $http) {
         var list = [];
         $scope.getSavedData = function() {
             $http({
@@ -30,6 +30,18 @@ app.controller("SavedLocationsController",
                     console.log("error", response);
                 });
         }
+
+        $scope.showOnMapFromSave = function (id) {
+            $scope.callToShowDataOnMap(id);
+            console.log("callToShowDataOnMap hit", id);
+            
+            $location.url("/home");
+        }
+
+        $scope.callToShowDataOnMap = function (id) {
+            mapService.addMarkerToService(id);
+        };
+
 
 
     });

@@ -1,5 +1,28 @@
 ﻿var app = angular.module("Authentication", ["ngRoute"]);
 
+app.service('mapService', function () {
+    var markerList = null;
+
+    var addMarkerToService = function (newObj) {
+        markerList = newObj;
+    };
+
+    var getMarkerLocation = function () {
+        return markerList;
+    };
+
+    return {
+        addMarkerToService: addMarkerToService,
+        getMarkerLocation: getMarkerLocation
+    };
+
+});
+
+
+
+
+
+
 app.service("UserService",
     function () {
        this.nashDataLocation = null;
@@ -26,11 +49,6 @@ app.config([
             {
                 templateUrl: "app/partials/Login.html",
                 controller: "LoginController"
-            })
-            .when("/signup",
-            {
-                templateUrl: "app/partials/SignUp.html",
-                controller: "SignUpController"
             })
             .when("/home",
             {

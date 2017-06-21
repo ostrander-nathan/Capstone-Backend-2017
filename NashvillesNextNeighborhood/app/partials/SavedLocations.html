@@ -3,8 +3,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2>{{thing.Address}}, {{thing.ZipCode}} District:{{thing.District}}</h2>
-                <p>Permit:{{thing.PermitType}} / {{thing.DescriptionOfBuild}}</p>
-                <input type="button" value="Show On Map" class="btn btn-default" ng-click="showOnMap(thing.Id)" />
+                <p>Permit:{{thing.PermitType}} / {{thing.DescriptionOfBuild}}</p><br/>
+                <p>{{thing.date_issued | date : format : timezone}}</p>
+                <input type="button" value="Show On Map" class="btn btn-default" ng-click="showOnMapFromSave(thing)" />
 
             </div>
             <table class="table table-fixed">
@@ -18,9 +19,9 @@
                 <tbody>
                 <tr>
                     <td class="col-xs-8">{{thing.Purpose}}</td>
-                    <td class="col-xs-2">${{thing.Cost}}</td>
+                    <td class="col-xs-2">{{thing.Cost  | currency: "$" : 3}}</td>
                     <td class="col-xs-2">
-                        <input type="button" value="Delete" class="btn btn-default" ng-click="delete(thing.Id)"/>
+                     <input type="button" value="Delete" class="btn btn-default" ng-click="delete(thing.Id)"/>
                     </td>
                 </tr>
                 </tbody>

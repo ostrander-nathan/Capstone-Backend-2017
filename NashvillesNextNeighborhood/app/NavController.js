@@ -1,7 +1,11 @@
 ﻿"use strict";
 
 app.controller("NavController",
-    function($scope, $location, $http) {
+    function($scope, $location, $http, $rootScope) {
+        $scope.user =function() {
+            return  $rootScope.user;
+        }
+
 
         $scope.goToHome = () => {
             $location.url("/home");
@@ -21,6 +25,21 @@ app.controller("NavController",
             $http.defaults.headers.common["Authorization"] = "";
             $location.path("/");
         };
+
+
+        $scope.navContainer = function () {
+            $scope.loginContainer = true;
+            $scope.registerContainer = true;
+            $scope.navContainer = false;
+
+        };
+
+
+
+
+
+
+
 
         // Handles Nav Bar functionality
         $(document).ready(function() {

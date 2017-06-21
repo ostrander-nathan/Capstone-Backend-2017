@@ -1,61 +1,62 @@
 ﻿<div class="container">
+<!--    <a id="top"></a>-->
+    <p>Hello {{user}} you are logged in!</p>
     <div class="row">
         <div class="col-md-8" id="mapHolder">
-            <div id="map" style="height: 500px; width: 700px;"></div>
+            <div id="map" style="height: 500px; width: 600px;"></div>
         </div>
         <div class="col-md-4">
-            <h2>Find out what is happening in your area</h2>
+            <h2 id="searchHeader">search your neighborhood</h2>
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
                     <input id="zipInput" type="text" class="form-control input-lg" placeholder="Type in your address" ng-model="address" required/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button"></button>
-                    </span>
-
                 </div>
-
             </div>
             <div>
                 <label>
-                    Current Building Permits for Zip Code :
+                    Current Building Permits for Zip Code :<br/>
                     <span id="postal_code" ng-model="zip" type="text"></span>
                 </label>
             </div>
-          
         </div>
     </div>
+    <div class="newSearch">
+        <input type="button" value="New Search" class="btn btn-default" ng-click="newSearch()" ng-disabled="myForm.$invalid"/>
+    </div>
 </div>
-<div class="newSearch">
-    <input type="button" value="New Search" class="btn btn-default" ng-click="newSearch()" ng-disabled="myForm.$invalid" />
-</div>
+
 <table class="table">
     <thead>
     <tr>
         <th class="col-xs-3">Address</th>
+        <th class="col-xs-3">Date Issued / Cost</th>
         <th class="col-xs-2">Description of Permit</th>
-        <th class="col-xs-5">Purpose</th>
-        <th class="col-xs-1">Cost</th>
-<!--        <th class="col-xs-1">Save Location</th>-->
+        <th class="col-xs-3">Purpose</th>
+        <th class="col-xs-1"></th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="thing in data.slice(((currentPage-1)*pageSize), ((currentPage)*pageSize)) track by $index">
         <td>{{thing.mapped_location_address}}, {{thing.mapped_location_zip}} District:{{thing.council_dist}}</td>
+        <td>{{thing.date_issued | date : format : timezone}}<br/>{{thing.const_cost | currency: "$" : 3 }}</td>
+
         <td>Permit:{{thing.permit_type_description}} / {{thing.permit_subtype_description}}</td>
         <td>{{thing.purpose}}</td>
-        <td>${{thing.const_cost}}</td>
-        <td class="col-xs-2">
+        <td class="col-xs-1">
             <input type="button" value="Save" class="btn btn-default" ng-click="save($index)"/>
+            <input type="button" value="Show on Map" class="btn btn-default" ng-click="showOnMap(thing)" />
+
         </td>
-        <td class="col-xs-2">
-            <input type="button" value="Show on Map" class="btn btn-default" ng-click="showOnMap($index)" />
-        </td>
+
     </tr>
 </table>
-<button ng-disabled="currentPage == 1" ng-click="currentPage=currentPage-1">
+<button id="paginationBtn" ng-disabled="currentPage == 1" ng-click="currentPage=currentPage-1">
     Previous
 </button>
 {{currentPage}}/{{numberOfPages()}}
-<button ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">
+<button  id="paginationBtn" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">
     Next
 </button>
+<!--<p><a href="#top">Go to Top</a></p>-->
+<p><a ng-click="goToTop()">Go to Top</a></p>
+

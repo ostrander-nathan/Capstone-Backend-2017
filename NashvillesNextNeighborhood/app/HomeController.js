@@ -1,8 +1,8 @@
 ﻿"use strict";
 app.controller("HomeController",
 [
-    "$scope", "$http", "$rootScope", 
-    function($scope, $http, $rootScope) {
+    "$scope", "$http", "$rootScope", "$window", "mapService",
+    function ($scope, $http, $rootScope, $window, mapService) {
         $rootScope.locationResult = {};
         var page = 0;
         $scope.markers = [];
@@ -12,6 +12,9 @@ app.controller("HomeController",
         $scope.data = [];
         $scope.q = "";
         $scope.input = "";
+
+
+        // Marker Icon
         var icon = {
             url: "/app/images/titansIcon.png",
             scaledSize: new google.maps.Size(70, 70),
@@ -20,7 +23,7 @@ app.controller("HomeController",
         };
 
         //Sets up Map Obj in addMap function
-        $scope.addMap = function(myLatlng) {
+        $scope.addMap = function (myLatlng) {
             $scope.map = new google.maps.Map(document.getElementById("map"),
             {
                 center: myLatlng,
@@ -30,7 +33,7 @@ app.controller("HomeController",
             });
         };
         //Sets up Markers Obj in addMarker function
-        $scope.addMarker = function(myLatlng) {
+        $scope.addMarker = function (myLatlng) {
             $scope.marker = new google.maps.Marker
             ({
                 position: myLatlng,
@@ -47,7 +50,7 @@ app.controller("HomeController",
 
 
         // Removes the markers from the map
-        $scope.clearMarkers = function() {
+        $scope.clearMarkers = function () {
             $scope.markers = [];
         };
 
@@ -63,7 +66,7 @@ app.controller("HomeController",
         var autocomplete = new google.maps.places.Autocomplete($scope.input, options);
         google.maps.event.addListener(autocomplete,
             "place_changed",
-            function() {
+            function () {
                 var place = autocomplete.getPlace();
                 for (var i = 0; i < place.address_components.length; i++) {
                     for (var j = 0; j < place.address_components[i].types.length; j++) {
@@ -78,9 +81,9 @@ app.controller("HomeController",
                 }
             });
         google.maps.event.addDomListener(window, "load");
+
         // zipSearch querys database for zipcodes with permits issued and adds markers to area
-        $scope.zipSearch = function(zipcode) {
-            //console.log("zipSearch Function called");
+        $scope.zipSearch = function (zipcode) {
             $.ajax({
                 url: `https://data.nashville.gov/resource/p5r5-bnga.json?zip=${zipcode}`,
                 type: "GET",
@@ -88,11 +91,10 @@ app.controller("HomeController",
                     "$limit": 100,
                     "$offset": page,
                     "$$app_token": "txvTrGDA6QIe9HrEnzsO9ZEtt"
-                    // "$$app_token": "NASHVILLEDATA"
                 }
-            }).done(function(data) {
+            }).done(function (data) {
                 var list = [];
-                Object.keys(data).forEach(function(key) {
+                Object.keys(data).forEach(function (key) {
                     var id = parseInt(page) + parseInt(key);
                     data[key].id = id;
                     list.push(data[key]);
@@ -105,7 +107,7 @@ app.controller("HomeController",
                 $scope.currentPage = 1;
                 $scope.pageSize = 10;
 
-                $scope.numberOfPages = function() {
+                $scope.numberOfPages = function () {
                     return Math.ceil($scope.data.length / $scope.pageSize);
                 };
                 for (var i = 0; i < 65; i++) {
@@ -113,150 +115,159 @@ app.controller("HomeController",
                 }
                 //END PAGINATION
 
-                for (var x in $scope.data) {
-                    if (data.hasOwnProperty(x)) {
-                        var permitIssued = data[x];
-                        var coordinates = permitIssued.mapped_location;
+                showDataOnMap();
 
-                        if (!coordinates) continue;
-
-                        var location = new google.maps.LatLng(permitIssued.mapped_location.coordinates[1],
-                            permitIssued.mapped_location.coordinates[0]);
-
-                        var marker = new google.maps.Marker({
-                            position: location,
-                            title: permitIssued.address,
-                            map: $scope.map
-                        });
-                        //$scope.markers = [];
-                        $scope.markers.push(marker);
-                        permitIssued.marker = marker;
-                        console.log("markers", $scope.markers);
-
-                        var myfunction = function(permit, marker) {
-                            console.log("permit", permit);
-                            return function() {
-                                var contentString = '<div id="iw-container">' +
-                                    `<div class="iw-title">${permit.address} <br> District : ${permit
-                                    .council_dist}</div>` +
-                                    '<div class="iw-content">' +
-                                    `<div class="iw-subTitle">${permit.permit_type_description}  $${permit
-                                    .const_cost}</div>` +
-                                    `<div class="iw-subTitle"> ${permit.permit_subtype_description}</div>` +
-                                    `<br><p>Purpose : ${permit.purpose} <br></p>` +
-                                    '<div class="iw-subTitle">Contacts</div>' +
-                                    `<p>${permit.contact}<br>${permit.zip} ${permit
-                                    .mapped_location_state}</p>` +
-                                    `<br><div><input type="button" value="save" class="btn btn-default" ng-click=save('${permit}')"</div>` +
-                                    '<div class="iw-bottom-gradient"></div>' +
-                                    "</div>";
-
-                                var infowindow = new google.maps.InfoWindow({
-                                    content: contentString
-                                });
-
-                                console.log("marker hit");
-                                infowindow.open($scope.map, marker);
-
-                                $scope.map.setZoom(14);
-                                $scope.map.setCenter(marker.getPosition());
-
-                                marker.addListener("click",
-                                    function() {
-                                        infowindow.open(map, marker);
-                                    });
-
-                                google.maps.event.addListener($scope.map,
-                                    "click",
-                                    function() {
-                                        infowindow.close();
-                                    });
-
-                                google.maps.event.addListener(infowindow,
-                                    "domready",
-                                    function() {
-                                        var iwOuter = $(".gm-style-iw");
-                                        var iwBackground = iwOuter.prev();
-                                        iwBackground.children(":nth-child(2)").css({ 'display': "none" });
-                                        iwBackground.children(":nth-child(4)").css({ 'display': "none" });
-                                        iwOuter.parent().parent().css({ left: "115px" });
-                                        iwBackground.children(":nth-child(1)")
-                                            .attr("style",
-                                                function(i, s) { return s + "left: 76px !important;" });
-                                        iwBackground.children(":nth-child(3)")
-                                            .attr("style",
-                                                function(i, s) { return s + "left: 76px !important;" });
-                                        iwBackground.children(":nth-child(3)").find("div").children()
-                                            .css({
-                                                'box-shadow': "rgba(72, 181, 233, 0.6) 0px 1px 6px",
-                                                'z-index':
-                                                    "1"
-                                            });
-                                        var iwCloseBtn = iwOuter.next();
-                                        iwCloseBtn.css({
-                                            opacity: "1",
-                                            right: "38px",
-                                            top: "3px",
-                                            border: "7px solid #48b5e9",
-                                            'border-radius': "13px",
-                                            'box-shadow': "0 0 5px #3990B9"
-                                        });
-                                        if ($(".iw-content").height() < 140) {
-                                            $(".iw-bottom-gradient").css({ display: "none" });
-                                        }
-                                        iwCloseBtn.mouseout(function() {
-                                            $(this).css({ opacity: "1" });
-                                        });
-                                    });
-                            };
-                        };
-                        marker.addListener("click", myfunction(permitIssued, marker));
-                    }
-                }
-                $scope.$apply();
                 google.maps.event.addDomListener(window, "load");
             });
         };
 
-        $scope.newSearch = function() {
+        var showDataOnMap = function () {
+            for (var x in $scope.data) {
+                if ($scope.data.hasOwnProperty(x)) {
+                    var permitIssued = $scope.data[x];
+                    var coordinates = permitIssued.mapped_location;
+
+                    if (!coordinates) continue;
+
+                    var location = new google.maps.LatLng(permitIssued.mapped_location.coordinates[1],
+                        permitIssued.mapped_location.coordinates[0]);
+
+                    var marker = new google.maps.Marker({
+                        position: location,
+                        title: permitIssued.address,
+                        map: $scope.map
+                    });
+                    $scope.markers.push(marker);
+                    permitIssued.marker = marker;
+                    console.log("markers", $scope.markers);
+
+                    var myfunction = function (permit, marker) {
+                        console.log("permit", permit);
+                        return function () {
+                            var contentString = '<div id="iw-container">' +
+                                `<div class="iw-title">${permit.address} <br> District : ${permit
+                                .council_dist}</div>` +
+                                '<div class="iw-content">' +
+                                `<div class="iw-subTitle">${permit.permit_type_description}  $${permit
+                                .const_cost}</div>` +
+                                `<div class="iw-subTitle"> ${permit.permit_subtype_description}</div>` +
+                                `<br><p>Purpose : ${permit.purpose} <br></p>` +
+                                '<div class="iw-subTitle">Contacts</div>' +
+                                `<p>${permit.contact}<br>${permit.zip} ${permit
+                                .mapped_location_state}</p>` +
+                                '<div class="iw-bottom-gradient"></div>' +
+                                "</div>";
+
+                            var infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                            });
+
+                            console.log("marker hit");
+                            infowindow.open($scope.map, marker);
+
+                            $scope.map.setZoom(14);
+                            $scope.map.setCenter(marker.getPosition());
+
+                            marker.addListener("click",
+                                function () {
+                                    infowindow.open(map, marker);
+                                });
+
+                            google.maps.event.addListener($scope.map,
+                                "click",
+                                function () {
+                                    infowindow.close();
+                                });
+
+                            google.maps.event.addListener(infowindow,
+                                "domready",
+                                function () {
+                                    var iwOuter = $(".gm-style-iw");
+                                    var iwBackground = iwOuter.prev();
+                                    iwBackground.children(":nth-child(2)").css({ 'display': "none" });
+                                    iwBackground.children(":nth-child(4)").css({ 'display': "none" });
+                                    iwOuter.parent().parent().css({ left: "115px" });
+                                    iwBackground.children(":nth-child(1)")
+                                        .attr("style",
+                                            function (i, s) { return s + "left: 76px !important;" });
+                                    iwBackground.children(":nth-child(3)")
+                                        .attr("style",
+                                            function (i, s) { return s + "left: 76px !important;" });
+                                    iwBackground.children(":nth-child(3)").find("div").children()
+                                        .css({
+                                            'box-shadow': "rgba(72, 181, 233, 0.6) 0px 1px 6px",
+                                            'z-index':
+                                                "1"
+                                        });
+                                    var iwCloseBtn = iwOuter.next();
+                                    iwCloseBtn.css({
+                                        opacity: "1",
+                                        right: "38px",
+                                        top: "3px",
+                                        border: "7px solid #48b5e9",
+                                        'border-radius': "13px",
+                                        'box-shadow': "0 0 5px #3990B9"
+                                    });
+                                    if ($(".iw-content").height() < 140) {
+                                        $(".iw-bottom-gradient").css({ display: "none" });
+                                    }
+                                    iwCloseBtn.mouseout(function () {
+                                        $(this).css({ opacity: "1" });
+                                    });
+                                });
+                        };
+                    };
+                    marker.addListener("click", myfunction(permitIssued, marker));
+                }
+                $scope.$apply();
+            }
+
+        }
+
+        $scope.newSearch = function () {
             $scope.address = "";
             $scope.data = [];
             $scope.markers = [];
             $scope.addMap(myLatlng);
             $scope.addMarker(myLatlng);
+            $scope.zip = "";
         };
 
-        $scope.showOnMap = function(obj) {
+        $scope.showOnMap = function (obj) {
             new google.maps.event.trigger(obj.marker, "click");
-
-
-
             google.maps.event.addListener($scope.map,
                 "click",
-                function() {
+                function () {
                     infowindow.close();
                 });
             console.log("showOnMap function", obj);
-
+            window.scrollTo(0, 0);
         };
+
+        $scope.goToTop = function() {
+            window.scrollTo(0, 0);
+        };
+
 
         $scope.save = function (index) {
             var obj = $scope.data[index];
             console.log("Save Function", obj);
             $http({
-                    url: "api/Save/Result",
-                    method: "POST",
-                    data: {
-                        "Address": obj.address,
-                        "ZipCode": obj.mapped_location_zip,
-                        "District": obj.council_dist,
-                        "Cost": obj.const_cost,
-                        "PermitType": obj.permit_subtype_description,
-                        "Purpose": obj.purpose,
-                        "DescriptionOfBuild": obj.permit_type_description
-                    }
-                })
-                .then(function(result) {
+                url: "api/Save/Result",
+                method: "POST",
+                data: {
+                    "Address": obj.address,
+                    "ZipCode": obj.mapped_location_zip,
+                    "District": obj.council_dist,
+                    "Cost": obj.const_cost,
+                    "PermitType": obj.permit_subtype_description,
+                    "Purpose": obj.purpose,
+                    "DescriptionOfBuild": obj.permit_type_description,
+                    "Lat": obj.mapped_location.coordinates[0],
+                    "Lng": obj.mapped_location.coordinates[1]
+                }
+            })
+                .then(function (result) {
                     $scope.deleteFromPage(index);
                     console.log("Save Function result", result);
                 });
@@ -266,6 +277,40 @@ app.controller("HomeController",
             $scope.data.splice(index, 1);
             console.log("Delete From Page Function", index);
         };
+
+
+        $("a[href=#top]").click(function () {
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            return false;
+        });
+
+        $scope.callToGetLocation = function () {
+
+            var singleLocation = mapService.getMarkerLocation();
+            
+
+            if (singleLocation) {
+
+                singleLocation = {
+                    address: singleLocation.Address,
+                    mapped_location_zip: singleLocation.ZipCode,
+                    council_dist: singleLocation.District,
+                    const_cost: singleLocation.Cost,
+                    permit_subtype_description: singleLocation.PermitType,
+                    purpose: singleLocation.Purpose,
+                    permit_type_description: singleLocation.DescriptionOfBuild ,
+                    mapped_location: {
+                        coordinates: [singleLocation.Lat, singleLocation.Lng]
+                    }
+                };
+
+                $scope.data = [singleLocation];
+
+                showDataOnMap();
+            }
+        };
+
+        $scope.callToGetLocation();
     }
 ]);
 

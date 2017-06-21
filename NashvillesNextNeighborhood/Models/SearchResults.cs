@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace NashvillesNextNeighborhood.Models
 {
@@ -18,6 +19,10 @@ namespace NashvillesNextNeighborhood.Models
         public string PermitType { get; set; }
         public string Purpose { get; set; }
         public string DescriptionOfBuild { get; set; }
+        public decimal Lat { get; set; }
+        public decimal Lng { get; set; }
+        [Required]
+        public string UID { get; set; }
 
     }
 }
