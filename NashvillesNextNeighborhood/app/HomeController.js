@@ -2,7 +2,7 @@
 app.controller("HomeController",
 [
     "$scope", "$http", "$rootScope", "$window", "mapService",
-    function ($scope, $http, $rootScope, $window, mapService) {
+    function($scope, $http, $rootScope, $window, mapService) {
         $rootScope.locationResult = {};
         var page = 0;
         $scope.markers = [];
@@ -23,7 +23,7 @@ app.controller("HomeController",
         };
 
         //Sets up Map Obj in addMap function
-        $scope.addMap = function (myLatlng) {
+        $scope.addMap = function(myLatlng) {
             $scope.map = new google.maps.Map(document.getElementById("map"),
             {
                 center: myLatlng,
@@ -33,7 +33,7 @@ app.controller("HomeController",
             });
         };
         //Sets up Markers Obj in addMarker function
-        $scope.addMarker = function (myLatlng) {
+        $scope.addMarker = function(myLatlng) {
             $scope.marker = new google.maps.Marker
             ({
                 position: myLatlng,
@@ -50,7 +50,7 @@ app.controller("HomeController",
 
 
         // Removes the markers from the map
-        $scope.clearMarkers = function () {
+        $scope.clearMarkers = function() {
             $scope.markers = [];
         };
 
@@ -66,7 +66,7 @@ app.controller("HomeController",
         var autocomplete = new google.maps.places.Autocomplete($scope.input, options);
         google.maps.event.addListener(autocomplete,
             "place_changed",
-            function () {
+            function() {
                 var place = autocomplete.getPlace();
                 for (var i = 0; i < place.address_components.length; i++) {
                     for (var j = 0; j < place.address_components[i].types.length; j++) {
@@ -83,7 +83,7 @@ app.controller("HomeController",
         google.maps.event.addDomListener(window, "load");
 
         // zipSearch querys database for zipcodes with permits issued and adds markers to area
-        $scope.zipSearch = function (zipcode) {
+        $scope.zipSearch = function(zipcode) {
             $.ajax({
                 url: `https://data.nashville.gov/resource/p5r5-bnga.json?zip=${zipcode}`,
                 type: "GET",
@@ -92,9 +92,9 @@ app.controller("HomeController",
                     "$offset": page,
                     "$$app_token": "txvTrGDA6QIe9HrEnzsO9ZEtt"
                 }
-            }).done(function (data) {
+            }).done(function(data) {
                 var list = [];
-                Object.keys(data).forEach(function (key) {
+                Object.keys(data).forEach(function(key) {
                     var id = parseInt(page) + parseInt(key);
                     data[key].id = id;
                     list.push(data[key]);
@@ -107,7 +107,7 @@ app.controller("HomeController",
                 $scope.currentPage = 1;
                 $scope.pageSize = 10;
 
-                $scope.numberOfPages = function () {
+                $scope.numberOfPages = function() {
                     return Math.ceil($scope.data.length / $scope.pageSize);
                 };
                 for (var i = 0; i < 65; i++) {
@@ -121,7 +121,7 @@ app.controller("HomeController",
             });
         };
 
-        var showDataOnMap = function () {
+        var showDataOnMap = function() {
             for (var x in $scope.data) {
                 if ($scope.data.hasOwnProperty(x)) {
                     var permitIssued = $scope.data[x];
@@ -141,9 +141,9 @@ app.controller("HomeController",
                     permitIssued.marker = marker;
                     console.log("markers", $scope.markers);
 
-                    var myfunction = function (permit, marker) {
+                    var myfunction = function(permit, marker) {
                         console.log("permit", permit);
-                        return function () {
+                        return function() {
                             var contentString = '<div id="iw-container">' +
                                 `<div class="iw-title">${permit.address} <br> District : ${permit
                                 .council_dist}</div>` +
@@ -169,19 +169,19 @@ app.controller("HomeController",
                             $scope.map.setCenter(marker.getPosition());
 
                             marker.addListener("click",
-                                function () {
+                                function() {
                                     infowindow.open(map, marker);
                                 });
 
                             google.maps.event.addListener($scope.map,
                                 "click",
-                                function () {
+                                function() {
                                     infowindow.close();
                                 });
 
                             google.maps.event.addListener(infowindow,
                                 "domready",
-                                function () {
+                                function() {
                                     var iwOuter = $(".gm-style-iw");
                                     var iwBackground = iwOuter.prev();
                                     iwBackground.children(":nth-child(2)").css({ 'display': "none" });
@@ -189,10 +189,10 @@ app.controller("HomeController",
                                     iwOuter.parent().parent().css({ left: "115px" });
                                     iwBackground.children(":nth-child(1)")
                                         .attr("style",
-                                            function (i, s) { return s + "left: 76px !important;" });
+                                            function(i, s) { return s + "left: 76px !important;" });
                                     iwBackground.children(":nth-child(3)")
                                         .attr("style",
-                                            function (i, s) { return s + "left: 76px !important;" });
+                                            function(i, s) { return s + "left: 76px !important;" });
                                     iwBackground.children(":nth-child(3)").find("div").children()
                                         .css({
                                             'box-shadow': "rgba(72, 181, 233, 0.6) 0px 1px 6px",
@@ -211,7 +211,7 @@ app.controller("HomeController",
                                     if ($(".iw-content").height() < 140) {
                                         $(".iw-bottom-gradient").css({ display: "none" });
                                     }
-                                    iwCloseBtn.mouseout(function () {
+                                    iwCloseBtn.mouseout(function() {
                                         $(this).css({ opacity: "1" });
                                     });
                                 });
@@ -219,12 +219,14 @@ app.controller("HomeController",
                     };
                     marker.addListener("click", myfunction(permitIssued, marker));
                 }
-                $scope.$apply();
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                    //$digest or $apply
+                }
             }
 
-        }
-
-        $scope.newSearch = function () {
+        };
+        $scope.newSearch = function() {
             $scope.address = "";
             $scope.data = [];
             $scope.markers = [];
@@ -233,11 +235,11 @@ app.controller("HomeController",
             $scope.zip = "";
         };
 
-        $scope.showOnMap = function (obj) {
+        $scope.showOnMap = function(obj) {
             new google.maps.event.trigger(obj.marker, "click");
             google.maps.event.addListener($scope.map,
                 "click",
-                function () {
+                function() {
                     infowindow.close();
                 });
             console.log("showOnMap function", obj);
@@ -249,45 +251,39 @@ app.controller("HomeController",
         };
 
 
-        $scope.save = function (index) {
+        $scope.save = function(index) {
             var obj = $scope.data[index];
             console.log("Save Function", obj);
             $http({
-                url: "api/Save/Result",
-                method: "POST",
-                data: {
-                    "Address": obj.address,
-                    "ZipCode": obj.mapped_location_zip,
-                    "District": obj.council_dist,
-                    "Cost": obj.const_cost,
-                    "PermitType": obj.permit_subtype_description,
-                    "Purpose": obj.purpose,
-                    "DescriptionOfBuild": obj.permit_type_description,
-                    "Lat": obj.mapped_location.coordinates[0],
-                    "Lng": obj.mapped_location.coordinates[1]
-                }
-            })
-                .then(function (result) {
+                    url: "api/Save/Result",
+                    method: "POST",
+                    data: {
+                        "Address": obj.address,
+                        "ZipCode": obj.mapped_location_zip,
+                        "District": obj.council_dist,
+                        "Cost": obj.const_cost,
+                        "PermitType": obj.permit_subtype_description,
+                        "Purpose": obj.purpose,
+                        "DescriptionOfBuild": obj.permit_type_description,
+                        "Lat": obj.mapped_location.coordinates[0],
+                        "Lng": obj.mapped_location.coordinates[1]
+                    }
+                })
+                .then(function(result) {
                     $scope.deleteFromPage(index);
                     console.log("Save Function result", result);
                 });
         };
 
-        $scope.deleteFromPage = function (index) {
+        $scope.deleteFromPage = function(index) {
             $scope.data.splice(index, 1);
             console.log("Delete From Page Function", index);
         };
 
-
-        $("a[href=#top]").click(function () {
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-            return false;
-        });
-
-        $scope.callToGetLocation = function () {
+        $scope.callToGetLocation = function() {
 
             var singleLocation = mapService.getMarkerLocation();
-            
+
 
             if (singleLocation) {
 
@@ -298,7 +294,7 @@ app.controller("HomeController",
                     const_cost: singleLocation.Cost,
                     permit_subtype_description: singleLocation.PermitType,
                     purpose: singleLocation.Purpose,
-                    permit_type_description: singleLocation.DescriptionOfBuild ,
+                    permit_type_description: singleLocation.DescriptionOfBuild,
                     mapped_location: {
                         coordinates: [singleLocation.Lat, singleLocation.Lng]
                     }
@@ -313,141 +309,3 @@ app.controller("HomeController",
         $scope.callToGetLocation();
     }
 ]);
-
-//$scope.loadMore = function(data) {
-//    console.log("LoadMore function data", data);
-//    page += 20;
-//    $scope.zipSearch(data);
-//};
-
-//        $scope.zipSearch = function (zipcode) {
-//            console.log(zipcode);
-//            var zipNum = parseInt(zipcode);
-//            console.log(zipNum);
-//            console.log("query from input of $scope.zipQuery:", $scope.zipQuery);
-//            $.ajax({
-//                url:`https://data.nashville.gov/resource/p5r5-bnga.json?zip=${zipNum}`,
-//                type: "GET",
-//                data: {
-//                    "$offset": page,
-//                    "$$app_token": "txvTrGDA6QIe9HrEnzsO9ZEtt"
-//                    // "$$app_token": "NASHVILLEDATA"
-//                }
-//            }).done(function(data) {
-//                var list = [];
-//                Object.keys(data).forEach(function(key) {
-//                    var id = parseInt(page) + parseInt(key);
-//                    data[key].id = id;
-//                    list.push(data[key]);
-//                });
-//                $scope.data = $scope.data.concat(list);
-//                $scope.$apply();
-//                console.log("initial data return", data);
-//            })
-//        };
-
-
-// Handles when the search button is clicked and what data is being passed
-//$scope.search = function () {
-//    console.log("query from input of $scope.query:", $scope.query);
-//    GoogleFactory.getLocationItems($scope.map, $scope.query)
-//        .then(function (result) {
-//            console.log("result in GoogleController return from GoogleFactory", result);
-//            $scope.map.setCenter(result[0].geometry.location);
-//            var marker = new google.maps.Marker({
-//                position: result[0].geometry.location,
-//                map: $scope.map,
-//                zoom: $scope.map.setZoom(12),
-//                draggable: true,
-//                title: "Click to zoom",
-//                icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
-//            });
-
-//            var infowindow = new google.maps.InfoWindow({
-//                content: result[0].formatted_address
-//            });
-
-//            marker.addListener("click",
-//                function () {
-//                    console.log("marker hit");
-//                    infowindow.open($scope.map, marker);
-//                    $scope.map.setZoom(18);
-//                    $scope.map.setCenter(marker.getPosition());
-//                });
-//            console.log("marker in search Functions", marker);
-//            console.log("result of input search button click", result);
-//            var markers = result;
-//            console.log("markers", markers);
-//            //markers.setMap(null);
-
-//        });
-//};
-//$scope.getNashData();
-
-//var marker = new google.maps.Marker({
-//    position: location,
-//    map: $scope.map,
-//    zoom: $scope.map.setZoom(12),
-//    draggable: true,
-//    title: "Click to zoom",
-//    icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
-//});
-
-
-//marker.setMap(null); will need to set markers to null
-//infowindow.close(); will possibly need
-//This will be needed to load Json from NashvilleData maybe but maybe not
-//loadGeoJson(url:string, options?:Data.GeoJsonOptions, callback?:function(Array<Data.Feature>))
-
-//Add Marker to map when called 
-//function addMarkerFromNashData(location) {
-//    console.log("Getting hit in GoogleController from HomeController", location);
-//    var icon = {
-//        url: "/app/constructionIcon.png",
-//        scaledSize: new google.maps.Size(30, 30),
-//        origin: new google.maps.Point(0, 0),
-//        anchor: new google.maps.Point(0, 0)
-//    }
-
-//function addMarker(location) {
-//    var icon = {
-//        //url: "/images/droneIcon.png",
-//        scaledSize: new google.maps.Size(30, 30),
-//        origin: new google.maps.Point(0, 0),
-//        anchor: new google.maps.Point(0, 0)
-//    };
-
-//    var markerAdd = new google.maps.Marker({
-//        position: location,
-//        map: $scope.map,
-//        animation: google.maps.Animation.DROP,
-//        icon: icon
-//    });
-//    markerAdd.addListener('click', toggleBounce);
-
-//    function toggleBounce() {
-//        if (markerAdd.getAnimation() !== null) {
-//            markerAdd.setAnimation(null);
-//        } else {
-//            markerAdd.setAnimation(google.maps.Animation.BOUNCE);
-//        }
-//    }
-
-
-//        $scope.objects = [
-//            { id: 1, name: "1st" }, { id: 2, name: "2nd" }, { id: 3, name: "3rd" },
-//            { id: 4, name: "4th" }, { id: 5, name: "5th" }, { id: 6, name: "6th" },
-//            { id: 7, name: "7th" }, { id: 8, name: "8th" }, { id: 9, name: "9th" },
-//            { id: 10, name: "10th" }, { id: 11, name: "11th" }, { id: 12, name: "12th" }
-//        ];
-//
-//        $scope.totalItems = $scope.objects.length;
-//        $scope.currentPage = 1;
-//        $scope.numPerPage = 5;
-//
-//        $scope.paginate = function (value) {
-//            var begin = ($scope.currentPage - 1) * $scope.numPerPage;
-//            var end = begin + $scope.numPerPage;
-//            var index = $scope.objects.indexOf(value);
-//            return (begin <= index && index < end);
-//        };

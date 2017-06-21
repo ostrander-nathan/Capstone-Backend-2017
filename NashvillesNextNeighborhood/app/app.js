@@ -5,6 +5,7 @@ app.service('mapService', function () {
 
     var addMarkerToService = function (newObj) {
         markerList = newObj;
+        console.log("markerList is mapservice", markerList);
     };
 
     var getMarkerLocation = function () {
@@ -18,28 +19,6 @@ app.service('mapService', function () {
 
 });
 
-
-
-
-
-
-app.service("UserService",
-    function () {
-       this.nashDataLocation = null;
-        //var users = ["sam", "mike", "bill"];
-        //return {
-        //    all: function() {
-        //        return users;
-        //    },
-        //    first: function() {
-        //        return users[0];
-        //    },
-        this.locationPass = function(location) {
-            console.log("location in app.js from pass in homecontroller", location);
-            this.nashDataLocation = location;
-        };
-
-    });
 
 
 app.config([

@@ -32,17 +32,11 @@ app.controller("SavedLocationsController",
         }
 
         $scope.showOnMapFromSave = function (id) {
-            $scope.callToShowDataOnMap(id);
+            mapService.addMarkerToService(id);
             console.log("callToShowDataOnMap hit", id);
             
             $location.url("/home");
         }
-
-        $scope.callToShowDataOnMap = function (id) {
-            mapService.addMarkerToService(id);
-        };
-
-
 
     });
    

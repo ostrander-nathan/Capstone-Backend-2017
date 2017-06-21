@@ -2,7 +2,6 @@
 [
     "$scope", "$rootScope", "$http", "$location", function ($scope, $rootScope, $http, $location) {
         $scope.loginContainer = true;
-        $scope.registerContainer = false;
         $scope.navContainer = false;
         $scope.register = {};
         $scope.register.email = "nathan@nathan.com";
@@ -13,7 +12,6 @@
         $scope.login.password = "123456Nss!";
 
         if ($location.path() === "/logout") {
-
             sessionStorage.removeItem("token");
             $http.defaults.headers.common["Authorization"] = "";
             $rootScope = {};
@@ -29,13 +27,6 @@
         $scope.setRegisterContainer = function () {
             $scope.loginContainer = false;
             $scope.registerContainer = true;
-
-        };
-
-        $scope.setNavContainer = function () {
-            $scope.loginContainer = true;
-            $scope.registerContainer = true;
-            $scope.navContainer = false;
 
         };
 

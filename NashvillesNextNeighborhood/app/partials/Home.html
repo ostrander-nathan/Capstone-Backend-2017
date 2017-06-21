@@ -1,5 +1,4 @@
 ﻿<div class="container">
-<!--    <a id="top"></a>-->
     <p>Hello {{user}} you are logged in!</p>
     <div class="row">
         <div class="col-md-8" id="mapHolder">
@@ -44,7 +43,7 @@
         <td>{{thing.purpose}}</td>
         <td class="col-xs-1">
             <input type="button" value="Save" class="btn btn-default" ng-click="save($index)"/>
-            <input type="button" value="Show on Map" class="btn btn-default" ng-click="showOnMap(thing)" />
+            <input type="button" value="Show on Map" class="btn btn-default" ng-click="showOnMap(thing)"/>
 
         </td>
 
@@ -54,9 +53,9 @@
     Previous
 </button>
 {{currentPage}}/{{numberOfPages()}}
-<button  id="paginationBtn" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">
+<button id="paginationBtn" ng-disabled="currentPage >= getData().length/pageSize - 1" ng-click="currentPage=currentPage+1">
     Next
 </button>
-<!--<p><a href="#top">Go to Top</a></p>-->
-<p><a ng-click="goToTop()">Go to Top</a></p>
-
+<p>
+    <a ng-click="goToTop()">Go to Top</a>
+</p>

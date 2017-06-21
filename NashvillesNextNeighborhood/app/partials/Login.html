@@ -6,18 +6,16 @@
             <h1 id="loginHeader">Nashville's Next Neighborhood</h1>
             <h2 id="loginHeader2">What's being built around me?</h2>
             <div class="row" id="loginBackgroundParagraph">
-            <p id="loginParagraph">In the ever changing skyline in Nashville, Tn this application allows users to view current permits issued in the area for various buildings and construction projects. It was built using AngularJS, Bootstrap, C# along with Data.Nashville.gov API and Google Maps API. </p>
+            <p id="loginParagraph">In the ever changing skyline of Nashville, Tn this application allows users to view current permits issued in the area for various buildings and construction projects. It was built using AngularJS, Bootstrap, C# along with Data.Nashville.gov API and Google Maps API. </p>
         </div>
         </div>
         <div class="col-md-4 col-md-offset-4">
-            <div class="col-xs-8 col-sm-6">
-                <button class="btn btn-primary btn-lg outline" ng-click="setLoginContainer()">Login</button>
-            </div>
-            <div class="col-xs-4 col-sm-6">
-                <button class="btn btn-primary btn-lg outline" ng-click="setRegisterContainer()">Register</button>
-            </div>
+          
 
             <form ng-show="loginContainer" id="loginContainerForm">
+                <div class="form-group">
+                    <a href="" class="btn btn-primary btn-lg outline" ng-click="loginUser(login)">Submit Login</a>
+                </div>
                 <div class="form-group">
                     <label id="loginLabels">Email Address:</label>
                     <input type="email" tabindex="2" class="form-control" placeholder="Email address" ng-model="login.email" required autofocus>
@@ -26,9 +24,7 @@
                     <label id="loginLabels">Password:</label>
                     <input type="password" tabindex="1" class="form-control" placeholder="Password" ng-model="login.password" required>
                 </div>
-                <div class="form-group">
-                    <a href="" class="btn btn-primary btn-lg outline" ng-click="loginUser(login)">Submit Login</a>
-                </div>
+
                 <div class="form-group text-center">
                     <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
                     <label for="remember"> Remember Me</label>
@@ -36,6 +32,9 @@
             </form>
 
             <form ng-show="registerContainer" id="registerContainerForm">
+                <div class="form-group">
+                    <a href="" class="btn btn-primary btn-lg outline" ng-click="registerUser(register)">Submit Registration</a>
+                </div>
                 <div class="form-group">
                     <label id="loginLabels">Email Address:</label>
                     <input type="email" tabindex="1" class="form-control" placeholder="Email address" ng-model="register.email" required autofocus>
@@ -48,10 +47,14 @@
                     <label id="loginLabels">Confirm Password:</label>
                     <input type="password" tabindex="2" class="form-control" placeholder="Confirm Password" ng-model="register.passwordconfirm" required>
                 </div>
-                <div class="form-group">
-                    <a href="" class="btn btn-primary btn-lg outline" ng-click="registerUser(register)">Submit Registration</a>
-                </div>
+
             </form>
+            <div class="col-xs-8 col-sm-6">
+                <button class="btn btn-primary btn-lg outline" ng-click="setLoginContainer()">Login</button>
+            </div>
+            <div class="col-xs-4 col-sm-6">
+                <button class="btn btn-primary btn-lg outline" ng-click="setRegisterContainer()">Register</button>
+            </div>
         </div>
     </div>
 </div>

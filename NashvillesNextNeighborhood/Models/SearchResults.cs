@@ -19,8 +19,8 @@ namespace NashvillesNextNeighborhood.Models
         public string PermitType { get; set; }
         public string Purpose { get; set; }
         public string DescriptionOfBuild { get; set; }
-        public decimal Lat { get; set; }
-        public decimal Lng { get; set; }
+        public double Lat { get; set; }
+        public double Lng { get; set; }
         [Required]
         public string UID { get; set; }
 
