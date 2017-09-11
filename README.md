@@ -1,5 +1,5 @@
 # Capstone-Backend-2017
-![Nashville's-Next-Neighborhood]
+![Nashville's-Next-Neighborhood](/NashvillesNextNeighborhood/app/img/NNN.png)
 
 ## Contributor
 * [Nathan Ostrander](https://github.com/ostrander-nathan)
@@ -18,14 +18,10 @@ In the ever changing skyline of Nashville, Tn this application allows users to v
 ### Resources 
 1. It was built using AngularJS, Bootstrap, C# along with Data.Nashville.gov API and Google Maps API.
 
-
-
 ### Search for Locations
 1. Search your interested locations and explore the current permits and updcoming projects that are all around this growing city. 
-
+![Nashville's-Next-Neighborhood](/NashvillesNextNeighborhood/app/img/searchNNN.png)
 
 ### My Profile
 1. Table display all saved locations
-
-
-
+![Nashville's-Next-Neighborhood](/NashvillesNextNeighborhood/app/img/savedNNN.png)
